@@ -46,7 +46,11 @@ class GeneticAlgoStrategy:
         # returns = np.dot(return_matrix, transposed_gene)
         # returns_cumsum = np.cumsum(returns)
         n_best = normalize_weights(best_gene)
-        weights = {symbols[x]: n_best[x] for x in range(0, len(best_gene))}
+
+        if isinstance(best_gene, float) or isinstance(best_gene, int):
+            weights = 1
+        else:
+            weights = {symbols[x]: n_best[x] for x in range(0, len(best_gene))}
         return weights
 
     def generate_initial_genes(self, symbols):
@@ -77,12 +81,13 @@ class GeneticAlgoStrategy:
         for gene in genes:
             # Gene is a distribution of weights for different stocks
             transposed_gene = gene.transpose()
-            returns = np.dot(return_matrix, transposed_gene)
-            # returns_cumsum = np.cumsum(returns)
+            if return_matrix != None:
+                returns = np.dot(return_matrix, transposed_gene)
+                # returns_cumsum = np.cumsum(returns)
 
-            # Get fitness score
-            fitness = self.fitness_score(returns)
-            genes_with_scores.append([fitness, gene])
+                # Get fitness score
+                fitness = self.fitness_score(returns)
+                genes_with_scores.append([fitness, gene])
 
         # Sort
         random_genes = [self.generate_gene() for _ in range(5)]

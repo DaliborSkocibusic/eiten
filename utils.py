@@ -15,17 +15,20 @@ class dotdict(dict):
 def normalize_weights(w):
     pos_sum = 0
     neg_sum = 0
-    for i in w:
-        if i > 0:
-            pos_sum += i
-        else:
-            neg_sum += i
-    neg_sum = abs(neg_sum)
-    for i in range(len(w)):
-        if w[i] > 0:
-            w[i] /= pos_sum
-        else:
-            w[i] /= neg_sum
+    
+    if not isinstance(w, float):
+        for i in w:
+            if i > 0:
+                pos_sum += i
+            else:
+                neg_sum += i
+
+        neg_sum = abs(neg_sum)
+        for i in range(len(w)):
+            if w[i] > 0:
+                w[i] /= pos_sum
+            else:
+                w[i] /= neg_sum
     return w
 
 
